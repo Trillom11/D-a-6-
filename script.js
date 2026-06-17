@@ -2,7 +2,7 @@
 // CONFIGURACIÓN: PON AQUÍ TU IMAGEN
 // ¡Cuidado! Distingue entre .jpg y .jpeg
 // ==========================================
-const IMAGE_URL = 'imagen.jpeg'; 
+const IMAGE_URL = 'Dia_6.jpeg'; 
 
 // Configuración 24 piezas (6 columnas x 4 filas)
 const COLS = 6;
