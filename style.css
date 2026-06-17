@@ -152,11 +152,15 @@ main {
 .piece-wrapper {
     width: 100px;
     height: 100px;
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.slot .piece-wrapper {
     position: absolute;
     top: 0;
     left: 0;
-    cursor: pointer;
-    transition: transform 0.2s;
 }
 
 .piece-wrapper svg {
