@@ -2,15 +2,15 @@
 // CONFIGURATION: SET YOUR IMAGE HERE
 // Distinguish between .jpg and .jpeg
 // ==========================================
+// Replace the top configuration block with this:
 const IMAGE_URL = 'Dia_6.jpeg'; 
 
-// 24 pieces setup (4 columns x 6 rows)
-const COLS = 4;
-const ROWS = 6;
-const BOARD_W = 400; 
-const BOARD_H = 600; 
-const PIECE_W = 100;
-const PIECE_H = 100;
+let COLS = 6;
+let ROWS = 6;
+let TOTAL_PIECES = 36;
+let BOARD_W, BOARD_H, PIECE_W, PIECE_H;
+
+const boardElement = document.getElementById('puzzle-board');
 
 const boardElement = document.getElementById('puzzle-board');
 const piecesContainer = document.getElementById('pieces-container');
@@ -24,7 +24,52 @@ let selectedPiece = null;
 const preloader = new Image();
 preloader.src = IMAGE_URL;
 
+// Replace the entire preloader.onload function with this block:
 preloader.onload = () => {
+    const imgW = preloader.naturalWidth;
+    const imgH = preloader.naturalHeight;
+    const imgRatio = imgW / imgH;
+
+    // Best factors of 36 to match the original aspect ratio
+    const possibleGrids = [
+        {c: 2, r: 18}, {c: 3, r: 12}, {c: 4, r: 9}, 
+        {c: 6, r: 6}, 
+        {c: 9, r: 4}, {c: 12, r: 3}, {c: 18, r: 2}
+    ];
+
+    let bestGrid = possibleGrids[0];
+    let minDiff = Infinity;
+
+    possibleGrids.forEach(grid => {
+        const gridRatio = grid.c / grid.r;
+        const diff = Math.abs(gridRatio - imgRatio);
+        if (diff < minDiff) {
+            minDiff = diff;
+            bestGrid = grid;
+        }
+    });
+
+    COLS = bestGrid.c;
+    ROWS = bestGrid.r;
+    TOTAL_PIECES = 36;
+
+    // Scale board to fit screen while maintaining exact ratio
+    if (imgRatio > 1) { 
+        BOARD_W = 600;
+        BOARD_H = BOARD_W / imgRatio;
+    } else { 
+        BOARD_H = 600;
+        BOARD_W = BOARD_H * imgRatio;
+    }
+
+    PIECE_W = BOARD_W / COLS;
+    PIECE_H = BOARD_H / ROWS;
+
+    boardElement.style.width = `${BOARD_W + 4}px`;
+    boardElement.style.height = `${BOARD_H + 4}px`;
+    boardElement.style.gridTemplateColumns = `repeat(${COLS}, ${PIECE_W}px)`;
+    boardElement.style.gridTemplateRows = `repeat(${ROWS}, ${PIECE_H}px)`;
+
     initGame();
 };
 
@@ -108,21 +153,21 @@ function initGame() {
             defs.appendChild(clipPath);
             svg.appendChild(defs);
 
+
             const image = document.createElementNS(svgNS, "image");
             image.setAttribute("href", IMAGE_URL);
             
-            // --- ZOOM AND CROP SETTINGS ---
-            // Adjust these values if you need to center the card more
-            const zoom = 1.3;     // 1.0 is normal, 1.3 is zoomed in 30%
-            const offsetX = -60;  // Negative moves image left, positive to right
-            const offsetY = -90;  // Negative moves image up, positive to down
+            // Slightly increased zoom as requested
+            const zoom = 1.5; 
+            const zoomedW = BOARD_W * zoom;
+            const zoomedH = BOARD_H * zoom;
+            const offsetX = -(zoomedW - BOARD_W) / 2;
+            const offsetY = -(zoomedH - BOARD_H) / 2;
             
-            image.setAttribute("width", BOARD_W * zoom);
-            image.setAttribute("height", BOARD_H * zoom);
+            image.setAttribute("width", zoomedW);
+            image.setAttribute("height", zoomedH);
             image.setAttribute("x", -(c * PIECE_W) + offsetX);
             image.setAttribute("y", -(r * PIECE_H) + offsetY);
-            image.setAttribute("preserveAspectRatio", "xMidYMid slice"); 
-            
             image.setAttribute("clip-path", `url(#clip-${currentId})`);
             svg.appendChild(image);
 
