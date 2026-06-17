@@ -2,7 +2,7 @@
 // CONFIGURATION: SET YOUR IMAGE HERE
 // Distinguish between .jpg and .jpeg
 // ==========================================
-const IMAGE_URL = 'imagen.jpg'; 
+const IMAGE_URL = 'imagen.png'; 
 
 // 24 pieces setup (4 columns x 6 rows)
 const COLS = 4;
