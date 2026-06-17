@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="gl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arquivo Policial - Caso #06</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="stamp">Alto Segredo</div>
+        <div class="system-info">
+            [SISTEMA DE EVIDENCIAS DA POLICÍA NACIONAL // ACCESO CONCEDIDO]
+        </div>
+        <h1 class="typewriter" id="typing-text">Aquí tes o teu regaliño do día 6, úsao con sabiduría, solo che digo unha cousa: "un gran poder conleva unha gran responsabilidade" :)</h1>
+    </header>
+
+    <main>
+        <!-- Discovered fragments panel -->
+        <div class="panel">
+            <div class="panel-title">
+                <span>Fragmentos Analizados</span>
+                <span>[ STATUS: DESORDENADO ]</span>
+            </div>
+            <p class="instructions">> Toca unha peza para seleccionala e logo toca un espazo baleiro para colocala. Podes intercambialas.</p>
+            <div id="pieces-container"></div>
+        </div>
+
+        <!-- Reconstruction board panel -->
+        <div class="panel board-panel">
+            <div class="panel-title full-width">
+                <span>Panel de Reconstrución</span>
+                <span id="progress-text">[ 0/9 ]</span>
+            </div>
+            <div id="puzzle-board"></div>
+        </div>
+    </main>
+
+    <!-- Hidden success panel -->
+    <div id="success-panel">
+        <h2 class="success-title">¡EVIDENCIA RECONSTRUÍDA CON ÉXITO!</h2>
+        <p>A imaxe orixinal foi descifrada polas bases de datos do departamento.</p>
+        <a id="download-btn" class="btn">Descargar Arquivo Orixinal</a>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
