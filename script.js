@@ -111,12 +111,14 @@ function initGame() {
             defs.appendChild(clipPath);
             svg.appendChild(defs);
 
+
             const image = document.createElementNS(svgNS, "image");
             image.setAttribute("href", IMAGE_URL);
             image.setAttribute("width", BOARD_W);
             image.setAttribute("height", BOARD_H);
-            image.setAttribute("x", -(c * PIECE_W));
-            image.setAttribute("y", -(r * PIECE_H));
+            // Coordenadas corregidas para que el fondo se alinee perfectamente con el recorte del SVG
+            image.setAttribute("x", padX - (c * PIECE_W));
+            image.setAttribute("y", padY - (r * PIECE_H));
             image.setAttribute("clip-path", `url(#clip-${currentId})`);
             svg.appendChild(image);
 
