@@ -2,7 +2,7 @@
 // CONFIGURATION: SET YOUR IMAGE HERE
 // Distinguish between .jpg and .jpeg
 // ==========================================
-const IMAGE_URL = 'imagen.jpg'; 
+const IMAGE_URL = 'Dia_6.jpeg'; 
 
 // 24 pieces setup (4 columns x 6 rows)
 const COLS = 4;
@@ -110,11 +110,19 @@ function initGame() {
 
             const image = document.createElementNS(svgNS, "image");
             image.setAttribute("href", IMAGE_URL);
-            image.setAttribute("width", BOARD_W);
-            image.setAttribute("height", BOARD_H);
-            // Fixed coordinates for background alignment
-            image.setAttribute("x", -(c * PIECE_W));
-            image.setAttribute("y", -(r * PIECE_H));
+            
+            // --- ZOOM AND CROP SETTINGS ---
+            // Adjust these values if you need to center the card more
+            const zoom = 1.3;     // 1.0 is normal, 1.3 is zoomed in 30%
+            const offsetX = -60;  // Negative moves image left, positive to right
+            const offsetY = -90;  // Negative moves image up, positive to down
+            
+            image.setAttribute("width", BOARD_W * zoom);
+            image.setAttribute("height", BOARD_H * zoom);
+            image.setAttribute("x", -(c * PIECE_W) + offsetX);
+            image.setAttribute("y", -(r * PIECE_H) + offsetY);
+            image.setAttribute("preserveAspectRatio", "xMidYMid slice"); 
+            
             image.setAttribute("clip-path", `url(#clip-${currentId})`);
             svg.appendChild(image);
 
