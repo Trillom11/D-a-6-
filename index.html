@@ -3,43 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arquivo Policial - Caso #06</title>
+    <title>Arquivo GC - Caso #06</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header>
         <div class="stamp">Alto Segredo</div>
-        <div class="system-info">
-            [SISTEMA DE EVIDENCIAS DA POLICÍA NACIONAL // ACCESO CONCEDIDO]
+        
+        <div class="header-content">
+            <!-- Escudo GC Simplificado -->
+            <svg width="50" height="60" viewBox="0 0 50 60" class="gc-logo">
+                <path d="M 25 0 L 50 10 L 50 30 C 50 45, 25 60, 25 60 C 25 60, 0 45, 0 30 L 0 10 Z" fill="#005b32" stroke="#f1c40f" stroke-width="3"/>
+                <text x="25" y="35" fill="#f1c40f" font-family="sans-serif" font-weight="bold" font-size="14" text-anchor="middle">GC</text>
+            </svg>
+            
+            <div class="header-text">
+                <div class="system-info">
+                    [SISTEMA DE EVIDENCIAS DA GUARDIA CIVIL // ACCESO CONCEDIDO]
+                </div>
+                <h1 class="typewriter" id="typing-text">Aquí tes o teu regaliño do día 6, úsao con sabiduría, solo che digo unha cousa: "un gran poder conleva unha gran responsabilidade" :)</h1>
+            </div>
         </div>
-        <h1 class="typewriter" id="typing-text">Aquí tes o teu regaliño do día 6, úsao con sabiduría, solo che digo unha cousa: "un gran poder conleva unha gran responsabilidade" :)</h1>
     </header>
 
     <main>
-        <!-- Discovered fragments panel -->
+        <!-- Panel de fragmentos -->
         <div class="panel">
             <div class="panel-title">
-                <span>Fragmentos Analizados</span>
-                <span>[ STATUS: DESORDENADO ]</span>
+                <span>Fragmentos de Evidencia</span>
+                <span class="status-alert">[ STATUS: DESORDENADO ]</span>
             </div>
             <p class="instructions">> Toca unha peza para seleccionala e logo toca un espazo baleiro para colocala. Podes intercambialas.</p>
             <div id="pieces-container"></div>
         </div>
 
-        <!-- Reconstruction board panel -->
+        <!-- Panel del tablero -->
         <div class="panel board-panel">
             <div class="panel-title full-width">
-                <span>Panel de Reconstrución</span>
-                <span id="progress-text">[ 0/9 ]</span>
+                <span>Panel de Reconstrución Táctica</span>
+                <span id="progress-text">[ 0/24 ]</span>
             </div>
-            <div id="puzzle-board"></div>
+            <div id="puzzle-board">
+                <!-- Se inyectarán los huecos aquí -->
+            </div>
         </div>
     </main>
 
-    <!-- Hidden success panel -->
+    <!-- Panel de éxito -->
     <div id="success-panel">
         <h2 class="success-title">¡EVIDENCIA RECONSTRUÍDA CON ÉXITO!</h2>
-        <p>A imaxe orixinal foi descifrada polas bases de datos do departamento.</p>
+        <p>A imaxe orixinal foi descifrada e catalogada nos arquivos da Comandancia.</p>
         <a id="download-btn" class="btn">Descargar Arquivo Orixinal</a>
     </div>
 
