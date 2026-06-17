@@ -1,6 +1,6 @@
 // GAME CONFIGURATION
 // Place your image name here
-const IMAGE_URL = 'my-photo.jpg'; 
+const IMAGE_URL = 'Dia_6.jpeg'; 
 
 const ROWS = 3;
 const COLS = 3;
