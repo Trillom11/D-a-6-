@@ -1,6 +1,215 @@
 @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
 
 :root {
+    --bg-color: #030a06;
+    --primary-green: #0a8a48;
+    --gc-green: #005b32;
+    --gc-gold: #f1c40f;
+    --alert-red: #d32f2f;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--primary-green);
+    font-family: 'Share Tech Mono', monospace;
+    line-height: 1.6;
+    padding: 20px;
+    background-image: 
+        linear-gradient(rgba(0, 91, 50, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 91, 50, 0.1) 1px, transparent 1px);
+    background-size: 30px 30px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+header {
+    max-width: 900px;
+    width: 100%;
+    border: 2px solid var(--gc-green);
+    border-top: 4px solid var(--gc-gold);
+    padding: 20px;
+    background: rgba(0, 40, 20, 0.6);
+    margin-bottom: 30px;
+    box-shadow: 0 0 20px rgba(0, 91, 50, 0.4);
+    position: relative;
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.stamp {
+    position: absolute;
+    top: -15px;
+    right: 20px;
+    color: var(--alert-red);
+    border: 3px solid var(--alert-red);
+    padding: 5px 15px;
+    font-weight: bold;
+    font-size: 1.2rem;
+    transform: rotate(3deg);
+    background: var(--bg-color);
+    letter-spacing: 2px;
+}
+
+.system-info {
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+    color: var(--gc-gold);
+}
+
+h1 {
+    font-size: 1.1rem;
+    color: #e0e0e0;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    align-items: center;
+    width: 100%;
+    max-width: 1100px;
+}
+
+@media (min-width: 950px) {
+    main {
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: center;
+    }
+}
+
+.panel {
+    border: 1px solid var(--gc-green);
+    padding: 20px;
+    background: rgba(0, 15, 8, 0.85);
+    width: 100%;
+    max-width: 450px;
+}
+
+.board-panel {
+    max-width: 650px;
+}
+
+.panel-title {
+    border-bottom: 1px solid var(--gc-green);
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    display: flex;
+    justify-content: space-between;
+    color: var(--gc-gold);
+}
+
+.full-width { width: 100%; }
+.status-alert { color: var(--alert-red); }
+
+#pieces-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    min-height: 420px;
+    align-content: flex-start;
+    justify-content: center;
+}
+
+/* Tablero de 6x4 para 24 piezas */
+#puzzle-board {
+    display: grid;
+    grid-template-columns: repeat(6, 100px);
+    grid-template-rows: repeat(4, 100px);
+    background: #020604;
+    border: 2px solid var(--gc-green);
+}
+
+.slot {
+    width: 100px;
+    height: 100px;
+    border: 1px solid rgba(0, 91, 50, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    color: rgba(10, 138, 72, 0.3);
+}
+
+/* Piezas de puzzle irregulares */
+.piece-wrapper {
+    width: 100px;
+    height: 100px;
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.piece-wrapper svg {
+    pointer-events: none; /* Hace que el clic sea solo en el cuadrado central */
+}
+
+.piece-wrapper:hover {
+    transform: scale(0.95);
+    z-index: 20;
+}
+
+.piece-wrapper.selected {
+    transform: scale(0.95);
+    z-index: 30;
+    filter: drop-shadow(0 0 10px var(--gc-gold));
+}
+
+#success-panel {
+    display: none;
+    margin-top: 30px;
+    text-align: center;
+    border: 2px solid var(--gc-gold);
+    padding: 20px;
+    background: rgba(241, 196, 15, 0.1);
+}
+
+.success-title {
+    color: var(--gc-gold);
+    margin-bottom: 10px;
+}
+
+.btn {
+    background: var(--gc-green);
+    color: #fff;
+    border: 2px solid var(--gc-gold);
+    padding: 10px 20px;
+    font-family: inherit;
+    font-size: 1.1rem;
+    cursor: pointer;
+    margin-top: 15px;
+    text-transform: uppercase;
+    font-weight: bold;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s;
+}
+
+.btn:hover {
+    background: var(--gc-gold);
+    color: var(--gc-green);
+}
+
+.instructions {
+    font-size: 0.85rem;
+    color: #81c784;
+    margin-bottom: 15px;
+}@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
+:root {
     --bg-color: #051008;
     --primary-green: #00ff41;
     --dark-green: #003b00;
