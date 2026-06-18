@@ -3,7 +3,7 @@
 // Distinguish between .jpg and .jpeg
 // ==========================================
 // Replace the top configuration block with this:
-const IMAGE_URL = 'Dia_6.jpeg'; 
+const IMAGE_URL = 'imagen.jpg'; 
 
 let COLS = 6;
 let ROWS = 6;
