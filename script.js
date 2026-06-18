@@ -1,15 +1,13 @@
 // ==========================================
 // CONFIGURATION
 // ==========================================
-const IMAGE_URL = 'imagen.jpg'; // Asegúrate de que el nombre del archivo es exactamente este
+const IMAGE_URL = 'imagen.png'; 
+let BOARD_W = 400; // <--- Cambia este número para el ancho
+let BOARD_H = 320; // <--- Cambia este número para el alto
 
 let COLS = 6;
 let ROWS = 6;
 let TOTAL_PIECES = 36;
-
-// Tamaño base para el tablero (mantiene proporción 1080:860)
-let BOARD_W = 1080/2; 
-let BOARD_H = 860/2; 
 let PIECE_W = BOARD_W / COLS;
 let PIECE_H = BOARD_H / ROWS;
 
@@ -23,12 +21,13 @@ let selectedPiece = null;
 
 // Inicializamos el juego directamente al cargar
 window.onload = () => {
+    // Aplicamos estilos fijos para evitar que el CSS lo estire
     boardElement.style.width = `${BOARD_W + 4}px`;
     boardElement.style.height = `${BOARD_H + 4}px`;
     boardElement.style.gridTemplateColumns = `repeat(${COLS}, ${PIECE_W}px)`;
     boardElement.style.gridTemplateRows = `repeat(${ROWS}, ${PIECE_H}px)`;
-    
-    // Sin imagen de fondo para que sea sorpresa
+    boardElement.style.maxWidth = '100%'; // Asegura que no rompa el diseño
+
     boardElement.style.backgroundImage = 'none';
     boardElement.style.boxShadow = 'none';
 
