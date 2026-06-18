@@ -148,8 +148,8 @@ function initGame() {
             
             // Busca esto en tu código:
             const zoom = 1.8; 
-            const zoomedW = BOARD_W * 1.5;
-            const zoomedH = BOARD_H * 2.2;
+            const zoomedW = BOARD_W * 1.3;
+            const zoomedH = BOARD_H * 2.5;
             const offsetX = -(zoomedW - BOARD_W) / 2;
             const offsetY = -(zoomedH - BOARD_H) / 2;
             
