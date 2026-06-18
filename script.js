@@ -147,7 +147,7 @@ function initGame() {
             image.setAttribute("href", IMAGE_URL);
             
             // --- AJUSTES DE RECORTE ---
-            const zoomX = 1.65; // Aumenta este si sigues viendo blanco a los lados
+            const zoomX = 1.9; // Aumenta este si sigues viendo blanco a los lados
             const zoomY = 1.15; // Baja este si corta mucho por arriba o por abajo
 
             const zoomedW = BOARD_W * zoomX;
