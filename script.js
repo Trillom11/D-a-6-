@@ -1,7 +1,7 @@
 // ==========================================
 // CONFIGURATION: SET YOUR IMAGE HERE
 // ==========================================
-const IMAGE_URL = 'imagen.jpg'; 
+const IMAGE_URL = 'imagen.png'; 
 
 let COLS = 6;
 let ROWS = 6;
