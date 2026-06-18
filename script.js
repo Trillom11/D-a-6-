@@ -8,8 +8,8 @@ let ROWS = 6;
 let TOTAL_PIECES = 36;
 
 // Tamaño base para el tablero (mantiene proporción 1080:860)
-let BOARD_W = 600; 
-let BOARD_H = 600 * (860 / 1080); 
+let BOARD_W = 1080; 
+let BOARD_H = 860; 
 let PIECE_W = BOARD_W / COLS;
 let PIECE_H = BOARD_H / ROWS;
 
