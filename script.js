@@ -1,15 +1,17 @@
 // ==========================================
 // CONFIGURATION
 // ==========================================
-const IMAGE_URL = 'imagen.jpg'; 
+const IMAGE_URL = 'imagen.jpg'; // Asegúrate de que el nombre del archivo es exactamente este
 
 let COLS = 6;
 let ROWS = 6;
 let TOTAL_PIECES = 36;
-// Fixed board size as requested
-let BOARD_W = 1080;
-let BOARD_H = 860;
-let PIECE_W, PIECE_H;
+
+// Tamaño base para el tablero (mantiene proporción 1080:860)
+let BOARD_W = 600; 
+let BOARD_H = 600 * (860 / 1080); 
+let PIECE_W = BOARD_W / COLS;
+let PIECE_H = BOARD_H / ROWS;
 
 const boardElement = document.getElementById('puzzle-board');
 const piecesContainer = document.getElementById('pieces-container');
@@ -19,35 +21,19 @@ const successPanel = document.getElementById('success-panel');
 let piecesArray = [];
 let selectedPiece = null;
 
-const preloader = new Image();
-
-preloader.onload = () => {
-    // Force fixed size calculation
-    PIECE_W = BOARD_W / COLS;
-    PIECE_H = BOARD_H / ROWS;
-
+// Inicializamos el juego directamente al cargar
+window.onload = () => {
     boardElement.style.width = `${BOARD_W + 4}px`;
     boardElement.style.height = `${BOARD_H + 4}px`;
     boardElement.style.gridTemplateColumns = `repeat(${COLS}, ${PIECE_W}px)`;
     boardElement.style.gridTemplateRows = `repeat(${ROWS}, ${PIECE_H}px)`;
     
-    // Background image removed for surprise
+    // Sin imagen de fondo para que sea sorpresa
     boardElement.style.backgroundImage = 'none';
     boardElement.style.boxShadow = 'none';
 
     initGame();
 };
-
-preloader.onerror = () => {
-    boardElement.style.display = 'block';
-    boardElement.innerHTML = `
-        <div style="color:#d32f2f; padding:30px; text-align:center; font-size:1.1rem;">
-            <b>[ ERRO CRÍTICO DE SISTEMA ]</b><br><br>
-            Non se atopou a evidencia visual: <i>${IMAGE_URL}</i>
-        </div>`;
-};
-
-preloader.src = IMAGE_URL;
 
 function getJigsawPath(w, h, top, right, bottom, left) {
     let d = `M 0 0 `;
@@ -86,7 +72,7 @@ function initGame() {
             const slot = document.createElement('div');
             slot.classList.add('slot');
             slot.dataset.id = currentId;
-            slot.innerText = `${(r*COLS)+c+1}`;
+            slot.innerText = ''; 
             slot.style.width = `${PIECE_W}px`;
             slot.style.height = `${PIECE_H}px`;
             slot.addEventListener('click', handleSlotClick);
@@ -117,10 +103,12 @@ function initGame() {
 
             const image = document.createElementNS(svgNS, "image");
             image.setAttribute("href", IMAGE_URL);
+            // Forzamos a que la imagen llene el tablero exacto
             image.setAttribute("width", BOARD_W);
             image.setAttribute("height", BOARD_H);
             image.setAttribute("x", -(c * PIECE_W));
             image.setAttribute("y", -(r * PIECE_H));
+            // 'none' evita que mantenga el aspecto original y lo estira a lo que le digamos
             image.setAttribute("preserveAspectRatio", "none"); 
             image.setAttribute("clip-path", `url(#clip-${currentId})`);
             svg.appendChild(image);
@@ -147,14 +135,6 @@ function initGame() {
 
     piecesArray.sort(() => Math.random() - 0.5);
     piecesArray.forEach(p => piecesContainer.appendChild(p));
-
-    piecesContainer.addEventListener('click', (e) => {
-        if (selectedPiece && e.target === piecesContainer) {
-            piecesContainer.appendChild(selectedPiece);
-            deselectPiece();
-            checkWinCondition();
-        }
-    });
 }
 
 function handlePieceClick(e) {
@@ -192,8 +172,7 @@ function deselectPiece() {
 
 function checkWinCondition() {
     let correctCount = 0;
-    const allSlots = document.querySelectorAll('.slot');
-    allSlots.forEach(slot => {
+    document.querySelectorAll('.slot').forEach(slot => {
         const innerPiece = slot.firstElementChild;
         if (innerPiece && innerPiece.dataset.id === slot.dataset.id) correctCount++;
     });
@@ -201,7 +180,5 @@ function checkWinCondition() {
     if (correctCount === TOTAL_PIECES) {
         successPanel.style.display = 'block';
         document.querySelectorAll('.piece-wrapper').forEach(p => p.style.pointerEvents = 'none');
-    } else {
-        successPanel.style.display = 'none';
     }
 }
