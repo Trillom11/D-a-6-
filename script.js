@@ -17,18 +17,15 @@ let piecesArray = [];
 let selectedPiece = null;
 
 const preloader = new Image();
-
 preloader.onload = () => {
     const imgW = preloader.naturalWidth;
     const imgH = preloader.naturalHeight;
     const imgRatio = imgW / imgH;
 
-    // Always split into exactly 36 pieces (6x6)
     COLS = 6;
     ROWS = 6;
     TOTAL_PIECES = 36;
 
-    // The board matches the exact original aspect ratio of the image
     if (imgRatio > 1) { 
         BOARD_W = 600;
         BOARD_H = BOARD_W / imgRatio;
@@ -37,7 +34,6 @@ preloader.onload = () => {
         BOARD_W = BOARD_H * imgRatio;
     }
 
-    // Pieces stretch automatically to fit the board
     PIECE_W = BOARD_W / COLS;
     PIECE_H = BOARD_H / ROWS;
 
@@ -45,6 +41,12 @@ preloader.onload = () => {
     boardElement.style.height = `${BOARD_H + 4}px`;
     boardElement.style.gridTemplateColumns = `repeat(${COLS}, ${PIECE_W}px)`;
     boardElement.style.gridTemplateRows = `repeat(${ROWS}, ${PIECE_H}px)`;
+
+    // Apply the original image as a faded background guide on the board
+    boardElement.style.backgroundImage = `url('${IMAGE_URL}')`;
+    boardElement.style.backgroundSize = '100% 100%';
+    boardElement.style.boxShadow = "inset 0 0 0 2000px rgba(2, 6, 4, 0.85)"; 
+    boardElement.style.backgroundPosition = 'center';
 
     initGame();
 };
@@ -95,15 +97,6 @@ function initGame() {
         for (let c = 0; c < COLS; c++) {
             const currentId = r + '-' + c;
             
-            const slot = document.createElement('div');
-            slot.classList.add('slot');
-            slot.dataset.id = currentId;
-            slot.innerText = `SEC-${(r*COLS)+c+1}`;
-            slot.style.width = `${PIECE_W}px`;
-            slot.style.height = `${PIECE_H}px`;
-            slot.addEventListener('click', handleSlotClick);
-            boardElement.appendChild(slot);
-            
             const tab = tabs[r][c];
             const pathData = getJigsawPath(PIECE_W, PIECE_H, tab.top, tab.right, tab.bottom, tab.left);
             const padX = PIECE_W * 0.3;
@@ -135,6 +128,7 @@ function initGame() {
             image.setAttribute("height", BOARD_H);
             image.setAttribute("x", -(c * PIECE_W));
             image.setAttribute("y", -(r * PIECE_H));
+            image.setAttribute("preserveAspectRatio", "none"); 
             image.setAttribute("clip-path", `url(#clip-${currentId})`);
             svg.appendChild(image);
 
