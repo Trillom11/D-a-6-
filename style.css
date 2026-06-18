@@ -118,20 +118,19 @@ main {
 #pieces-container {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 15px;
     min-height: 420px;
     align-content: flex-start;
     justify-content: center;
 }
 
-/* Fixed board: 4 columns x 6 rows */
 #puzzle-board {
     display: grid;
     background: #020604;
     border: 2px solid var(--gc-green);
     position: relative;
+    margin: 0 auto;
 }
-
 
 .slot {
     border: 1px dashed rgba(0, 91, 50, 0.4);
@@ -157,9 +156,6 @@ main {
 
 .piece-wrapper svg {
     pointer-events: none;
-    position: absolute;
-    top: -30px;
-    left: -30px;
 }
 
 .piece-wrapper:hover {
@@ -170,7 +166,7 @@ main {
 .piece-wrapper.selected {
     transform: scale(0.95);
     z-index: 30;
-    filter: drop-shadow(0 0 10px var(--gc-gold));
+    filter: drop-shadow(0 0 15px var(--gc-gold));
 }
 
 #success-panel {
