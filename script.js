@@ -26,8 +26,8 @@ let selectedPiece = null;
 const preloader = new Image();
 
 preloader.onload = () => {
-    const imgW = preloader.naturalWidth;
-    const imgH = preloader.naturalHeight;
+    const imgW = preloader.1080;
+    const imgH = preloader.860;
     const targetRatio = 1080 / 860;
     const imgRatio = imgW / imgH;
 
