@@ -146,7 +146,8 @@ function initGame() {
             const image = document.createElementNS(svgNS, "image");
             image.setAttribute("href", IMAGE_URL);
             
-            const zoom = 1.5; 
+            // Busca esto en tu código:
+            const zoom = 1.8; 
             const zoomedW = BOARD_W * zoom;
             const zoomedH = BOARD_H * zoom;
             const offsetX = -(zoomedW - BOARD_W) / 2;
