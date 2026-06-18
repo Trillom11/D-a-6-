@@ -1,12 +1,15 @@
 // ==========================================
-// CONFIGURATION: SET YOUR IMAGE HERE
+// CONFIGURATION
 // ==========================================
-const IMAGE_URL = 'imagen.png'; 
+const IMAGE_URL = 'imagen.jpg'; 
 
 let COLS = 6;
 let ROWS = 6;
 let TOTAL_PIECES = 36;
-let BOARD_W, BOARD_H, PIECE_W, PIECE_H;
+// Fixed board size as requested
+let BOARD_W = 1080;
+let BOARD_H = 860;
+let PIECE_W, PIECE_H;
 
 const boardElement = document.getElementById('puzzle-board');
 const piecesContainer = document.getElementById('pieces-container');
@@ -17,39 +20,22 @@ let piecesArray = [];
 let selectedPiece = null;
 
 const preloader = new Image();
-// Replace the entire preloader.onload block in your script.js
+
 preloader.onload = () => {
-    const imgW = preloader.naturalWidth;
-    const imgH = preloader.naturalHeight;
-    const imgRatio = imgW / imgH;
-
-    // Grid configuration
-    COLS = 6;
-    ROWS = 6;
-    TOTAL_PIECES = 36;
-
-    // Calculate dimensions maintaining the exact original aspect ratio
-    if (imgRatio > 1) { 
-        BOARD_W = 600;
-        BOARD_H = BOARD_W / imgRatio;
-    } else { 
-        BOARD_H = 600;
-        BOARD_W = BOARD_H * imgRatio;
-    }
-
+    // Force fixed size calculation
     PIECE_W = BOARD_W / COLS;
     PIECE_H = BOARD_H / ROWS;
 
-    // Apply exact dimensions to the board
     boardElement.style.width = `${BOARD_W + 4}px`;
     boardElement.style.height = `${BOARD_H + 4}px`;
     boardElement.style.gridTemplateColumns = `repeat(${COLS}, ${PIECE_W}px)`;
     boardElement.style.gridTemplateRows = `repeat(${ROWS}, ${PIECE_H}px)`;
-
-    // Background image code removed to keep the puzzle a surprise
+    
+    // Background image removed for surprise
+    boardElement.style.backgroundImage = 'none';
+    boardElement.style.boxShadow = 'none';
 
     initGame();
-};
 };
 
 preloader.onerror = () => {
@@ -57,8 +43,7 @@ preloader.onerror = () => {
     boardElement.innerHTML = `
         <div style="color:#d32f2f; padding:30px; text-align:center; font-size:1.1rem;">
             <b>[ ERRO CRÍTICO DE SISTEMA ]</b><br><br>
-            Non se atopou a evidencia visual: <i>${IMAGE_URL}</i><br><br>
-            Asegúrate de que o arquivo está subido e que o nome está EXACTAMENTE igual.
+            Non se atopou a evidencia visual: <i>${IMAGE_URL}</i>
         </div>`;
 };
 
@@ -98,6 +83,15 @@ function initGame() {
         for (let c = 0; c < COLS; c++) {
             const currentId = r + '-' + c;
             
+            const slot = document.createElement('div');
+            slot.classList.add('slot');
+            slot.dataset.id = currentId;
+            slot.innerText = `${(r*COLS)+c+1}`;
+            slot.style.width = `${PIECE_W}px`;
+            slot.style.height = `${PIECE_H}px`;
+            slot.addEventListener('click', handleSlotClick);
+            boardElement.appendChild(slot);
+            
             const tab = tabs[r][c];
             const pathData = getJigsawPath(PIECE_W, PIECE_H, tab.top, tab.right, tab.bottom, tab.left);
             const padX = PIECE_W * 0.3;
@@ -108,7 +102,6 @@ function initGame() {
             svg.setAttribute("viewBox", `-${padX} -${padY} ${PIECE_W + padX*2} ${PIECE_H + padY*2}`);
             svg.setAttribute("width", PIECE_W + padX*2);
             svg.setAttribute("height", PIECE_H + padY*2);
-            
             svg.style.position = 'absolute';
             svg.style.top = `-${padY}px`;
             svg.style.left = `-${padX}px`;
@@ -122,7 +115,6 @@ function initGame() {
             defs.appendChild(clipPath);
             svg.appendChild(defs);
 
-            // Clean dynamic image setup
             const image = document.createElementNS(svgNS, "image");
             image.setAttribute("href", IMAGE_URL);
             image.setAttribute("width", BOARD_W);
@@ -168,12 +160,7 @@ function initGame() {
 function handlePieceClick(e) {
     e.stopPropagation(); 
     const clickedPiece = e.currentTarget;
-
-    if (selectedPiece === clickedPiece) {
-        deselectPiece();
-        return;
-    }
-
+    if (selectedPiece === clickedPiece) { deselectPiece(); return; }
     if (selectedPiece) {
         const tempParent = clickedPiece.parentElement;
         const selectedParent = selectedPiece.parentElement;
@@ -183,7 +170,6 @@ function handlePieceClick(e) {
         checkWinCondition();
         return;
     }
-
     selectedPiece = clickedPiece;
     selectedPiece.classList.add('selected');
 }
@@ -207,16 +193,11 @@ function deselectPiece() {
 function checkWinCondition() {
     let correctCount = 0;
     const allSlots = document.querySelectorAll('.slot');
-    
     allSlots.forEach(slot => {
         const innerPiece = slot.firstElementChild;
-        if (innerPiece && innerPiece.dataset.id === slot.dataset.id) {
-            correctCount++;
-        }
+        if (innerPiece && innerPiece.dataset.id === slot.dataset.id) correctCount++;
     });
-    
     progressText.innerText = `[ ${correctCount}/${TOTAL_PIECES} ]`;
-
     if (correctCount === TOTAL_PIECES) {
         successPanel.style.display = 'block';
         document.querySelectorAll('.piece-wrapper').forEach(p => p.style.pointerEvents = 'none');
