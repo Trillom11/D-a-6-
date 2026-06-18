@@ -1,7 +1,7 @@
 // ==========================================
 // CONFIGURATION: SET YOUR IMAGE HERE
 // ==========================================
-const IMAGE_URL = 'imagen.jpg'; 
+const IMAGE_URL = 'Dia_6.jpeg'; 
 
 let COLS = 6;
 let ROWS = 6;
@@ -16,16 +16,13 @@ const successPanel = document.getElementById('success-panel');
 let piecesArray = [];
 let selectedPiece = null;
 
-// Preload image
 const preloader = new Image();
 
-// MUST BE DEFINED BEFORE SETTING SRC
 preloader.onload = () => {
     const imgW = preloader.naturalWidth;
     const imgH = preloader.naturalHeight;
     const imgRatio = imgW / imgH;
 
-    // Best factors of 36 to match the original aspect ratio
     const possibleGrids = [
         {c: 2, r: 18}, {c: 3, r: 12}, {c: 4, r: 9}, 
         {c: 6, r: 6}, 
@@ -48,7 +45,6 @@ preloader.onload = () => {
     ROWS = bestGrid.r;
     TOTAL_PIECES = 36;
 
-    // Scale board to fit screen while maintaining exact ratio
     if (imgRatio > 1) { 
         BOARD_W = 600;
         BOARD_H = BOARD_W / imgRatio;
@@ -78,22 +74,16 @@ preloader.onerror = () => {
         </div>`;
 };
 
-// SET SRC AFTER ONLOAD TO PREVENT CACHE RACE CONDITIONS
 preloader.src = IMAGE_URL;
 
-// Generates actual jigsaw shapes (tabs/blanks)
 function getJigsawPath(w, h, top, right, bottom, left) {
     let d = `M 0 0 `;
-    // Top
     if (top === 0) d += `h ${w} `;
     else d += `h ${w*0.3} c 0 ${-h*0.2*top}, ${w*0.4} ${-h*0.2*top}, ${w*0.4} 0 h ${w*0.3} `;
-    // Right
     if (right === 0) d += `v ${h} `;
     else d += `v ${h*0.3} c ${w*0.2*right} 0, ${w*0.2*right} ${h*0.4}, 0 ${h*0.4} v ${h*0.3} `;
-    // Bottom
     if (bottom === 0) d += `h ${-w} `;
     else d += `h ${-w*0.3} c 0 ${h*0.2*bottom}, ${-w*0.4} ${h*0.2*bottom}, ${-w*0.4} 0 h ${-w*0.3} `;
-    // Left
     if (left === 0) d += `v ${-h} `;
     else d += `v ${-h*0.3} c ${-w*0.2*left} 0, ${-w*0.2*left} ${-h*0.4}, 0 ${-h*0.4} v ${-h*0.3} `;
     return d + ' Z';
@@ -103,7 +93,6 @@ function initGame() {
     document.getElementById('download-btn').href = IMAGE_URL;
     document.getElementById('download-btn').download = 'evidencia_gc_recuperada.jpg';
 
-    // Generate logical connections so pieces fit together mathematically
     const tabs = [];
     for (let r = 0; r < ROWS; r++) {
         tabs[r] = [];
@@ -117,12 +106,10 @@ function initGame() {
         }
     }
 
-    // Create SVG pieces
     for (let r = 0; r < ROWS; r++) {
         for (let c = 0; c < COLS; c++) {
             const currentId = r + '-' + c;
             
-            // Slot in the board
             const slot = document.createElement('div');
             slot.classList.add('slot');
             slot.dataset.id = currentId;
@@ -132,7 +119,6 @@ function initGame() {
             slot.addEventListener('click', handleSlotClick);
             boardElement.appendChild(slot);
             
-            // Generate piece with irregular shape
             const tab = tabs[r][c];
             const pathData = getJigsawPath(PIECE_W, PIECE_H, tab.top, tab.right, tab.bottom, tab.left);
             const padX = PIECE_W * 0.3;
@@ -143,6 +129,10 @@ function initGame() {
             svg.setAttribute("viewBox", `-${padX} -${padY} ${PIECE_W + padX*2} ${PIECE_H + padY*2}`);
             svg.setAttribute("width", PIECE_W + padX*2);
             svg.setAttribute("height", PIECE_H + padY*2);
+            
+            svg.style.position = 'absolute';
+            svg.style.top = `-${padY}px`;
+            svg.style.left = `-${padX}px`;
 
             const defs = document.createElementNS(svgNS, "defs");
             const clipPath = document.createElementNS(svgNS, "clipPath");
@@ -156,7 +146,6 @@ function initGame() {
             const image = document.createElementNS(svgNS, "image");
             image.setAttribute("href", IMAGE_URL);
             
-            // Slightly increased zoom as requested
             const zoom = 1.5; 
             const zoomedW = BOARD_W * zoom;
             const zoomedH = BOARD_H * zoom;
@@ -170,7 +159,6 @@ function initGame() {
             image.setAttribute("clip-path", `url(#clip-${currentId})`);
             svg.appendChild(image);
 
-            // Tactical outline
             const outline = document.createElementNS(svgNS, "path");
             outline.setAttribute("d", pathData);
             outline.setAttribute("fill", "none");
@@ -179,7 +167,6 @@ function initGame() {
             outline.setAttribute("opacity", "0.5");
             svg.appendChild(outline);
 
-            // Interactive wrapper
             const wrapper = document.createElement('div');
             wrapper.className = 'piece-wrapper';
             wrapper.dataset.id = currentId;
@@ -192,11 +179,9 @@ function initGame() {
         }
     }
 
-    // Shuffle and place in the container
     piecesArray.sort(() => Math.random() - 0.5);
     piecesArray.forEach(p => piecesContainer.appendChild(p));
 
-    // Allow returning pieces
     piecesContainer.addEventListener('click', (e) => {
         if (selectedPiece && e.target === piecesContainer) {
             piecesContainer.appendChild(selectedPiece);
