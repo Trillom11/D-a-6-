@@ -143,30 +143,13 @@ function initGame() {
             defs.appendChild(clipPath);
             svg.appendChild(defs);
 
+            // Clean dynamic image setup
             const image = document.createElementNS(svgNS, "image");
             image.setAttribute("href", IMAGE_URL);
-            
-            // --- AJUSTES DE RECORTE ---
-            const zoomX = 1.9; // Aumenta este si sigues viendo blanco a los lados
-            const zoomY = 1.15; // Baja este si corta mucho por arriba o por abajo
-
-            const zoomedW = BOARD_W * zoomX;
-            const zoomedH = BOARD_H * zoomY;
-            
-            // Si después del zoom la imagen no está centrada, cambia estos ceros:
-            const moverX = 0; // Negativo mueve a la izquierda, Positivo a la derecha
-            const moverY = 0; // Negativo mueve hacia arriba, Positivo hacia abajo
-
-            const offsetX = -(zoomedW - BOARD_W) / 2 + moverX;
-            const offsetY = -(zoomedH - BOARD_H) / 2 + moverY;
-            
-            image.setAttribute("width", zoomedW);
-            image.setAttribute("height", zoomedH);
-            image.setAttribute("x", -(c * PIECE_W) + offsetX);
-            image.setAttribute("y", -(r * PIECE_H) + offsetY);
-            
-            // ¡MUY IMPORTANTE! Obliga a la imagen a recortarse exactamente como le dices
-            image.setAttribute("preserveAspectRatio", "none"); 
+            image.setAttribute("width", BOARD_W);
+            image.setAttribute("height", BOARD_H);
+            image.setAttribute("x", -(c * PIECE_W));
+            image.setAttribute("y", -(r * PIECE_H));
             image.setAttribute("clip-path", `url(#clip-${currentId})`);
             svg.appendChild(image);
 
