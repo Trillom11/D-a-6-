@@ -17,15 +17,18 @@ let piecesArray = [];
 let selectedPiece = null;
 
 const preloader = new Image();
+// Replace the entire preloader.onload block in your script.js
 preloader.onload = () => {
     const imgW = preloader.naturalWidth;
     const imgH = preloader.naturalHeight;
     const imgRatio = imgW / imgH;
 
+    // Grid configuration
     COLS = 6;
     ROWS = 6;
     TOTAL_PIECES = 36;
 
+    // Calculate dimensions maintaining the exact original aspect ratio
     if (imgRatio > 1) { 
         BOARD_W = 600;
         BOARD_H = BOARD_W / imgRatio;
@@ -37,18 +40,16 @@ preloader.onload = () => {
     PIECE_W = BOARD_W / COLS;
     PIECE_H = BOARD_H / ROWS;
 
+    // Apply exact dimensions to the board
     boardElement.style.width = `${BOARD_W + 4}px`;
     boardElement.style.height = `${BOARD_H + 4}px`;
     boardElement.style.gridTemplateColumns = `repeat(${COLS}, ${PIECE_W}px)`;
     boardElement.style.gridTemplateRows = `repeat(${ROWS}, ${PIECE_H}px)`;
 
-    // Apply the original image as a faded background guide on the board
-    boardElement.style.backgroundImage = `url('${IMAGE_URL}')`;
-    boardElement.style.backgroundSize = '100% 100%';
-    boardElement.style.boxShadow = "inset 0 0 0 2000px rgba(2, 6, 4, 0.85)"; 
-    boardElement.style.backgroundPosition = 'center';
+    // Background image code removed to keep the puzzle a surprise
 
     initGame();
+};
 };
 
 preloader.onerror = () => {
