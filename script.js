@@ -23,28 +23,12 @@ preloader.onload = () => {
     const imgH = preloader.naturalHeight;
     const imgRatio = imgW / imgH;
 
-    const possibleGrids = [
-        {c: 2, r: 18}, {c: 3, r: 12}, {c: 4, r: 9}, 
-        {c: 6, r: 6}, 
-        {c: 9, r: 4}, {c: 12, r: 3}, {c: 18, r: 2}
-    ];
-
-    let bestGrid = possibleGrids[0];
-    let minDiff = Infinity;
-
-    possibleGrids.forEach(grid => {
-        const gridRatio = grid.c / grid.r;
-        const diff = Math.abs(gridRatio - imgRatio);
-        if (diff < minDiff) {
-            minDiff = diff;
-            bestGrid = grid;
-        }
-    });
-
-    COLS = bestGrid.c;
-    ROWS = bestGrid.r;
+    // Always split into exactly 36 pieces (6x6)
+    COLS = 6;
+    ROWS = 6;
     TOTAL_PIECES = 36;
 
+    // The board matches the exact original aspect ratio of the image
     if (imgRatio > 1) { 
         BOARD_W = 600;
         BOARD_H = BOARD_W / imgRatio;
@@ -53,6 +37,7 @@ preloader.onload = () => {
         BOARD_W = BOARD_H * imgRatio;
     }
 
+    // Pieces stretch automatically to fit the board
     PIECE_W = BOARD_W / COLS;
     PIECE_H = BOARD_H / ROWS;
 
