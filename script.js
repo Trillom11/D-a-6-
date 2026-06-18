@@ -3,6 +3,7 @@
 // Distinguish between .jpg and .jpeg
 // ==========================================
 // Replace the top configuration block with this:
+// GAME CONFIGURATION
 const IMAGE_URL = 'imagen.jpg'; 
 
 let COLS = 6;
@@ -11,7 +12,6 @@ let TOTAL_PIECES = 36;
 let BOARD_W, BOARD_H, PIECE_W, PIECE_H;
 
 const boardElement = document.getElementById('puzzle-board');
-
 const piecesContainer = document.getElementById('pieces-container');
 const progressText = document.getElementById('progress-text');
 const successPanel = document.getElementById('success-panel');
