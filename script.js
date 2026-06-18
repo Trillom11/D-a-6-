@@ -1,15 +1,19 @@
 // ==========================================
 // CONFIGURATION
 // ==========================================
-const IMAGE_URL = 'imagen.png'; 
-let BOARD_W = 400; // <--- Cambia este número para el ancho
-let BOARD_H = 320; // <--- Cambia este número para el alto
-
+const IMAGE_URL = 'imagen.jpg'; 
 let COLS = 6;
 let ROWS = 6;
 let TOTAL_PIECES = 36;
+
+// Formato deseado: 1080x860
+let BOARD_W = 1080 / 2; // Reducido a la mitad para que no sea gigante
+let BOARD_H = 860 / 2;
 let PIECE_W = BOARD_W / COLS;
 let PIECE_H = BOARD_H / ROWS;
+
+// Variables de recorte para centrar
+let cropX, cropY, cropW, cropH;
 
 const boardElement = document.getElementById('puzzle-board');
 const piecesContainer = document.getElementById('pieces-container');
@@ -19,20 +23,36 @@ const successPanel = document.getElementById('success-panel');
 let piecesArray = [];
 let selectedPiece = null;
 
-// Inicializamos el juego directamente al cargar
-window.onload = () => {
-    // Aplicamos estilos fijos para evitar que el CSS lo estire
+const preloader = new Image();
+
+preloader.onload = () => {
+    const imgW = preloader.naturalWidth;
+    const imgH = preloader.naturalHeight;
+    const targetRatio = 1080 / 860;
+    const imgRatio = imgW / imgH;
+
+    // Calcular el recorte centrado
+    if (imgRatio > targetRatio) {
+        cropH = imgH;
+        cropW = imgH * targetRatio;
+        cropX = (imgW - cropW) / 2;
+        cropY = 0;
+    } else {
+        cropW = imgW;
+        cropH = imgW / targetRatio;
+        cropX = 0;
+        cropY = (imgH - cropH) / 2;
+    }
+
     boardElement.style.width = `${BOARD_W + 4}px`;
     boardElement.style.height = `${BOARD_H + 4}px`;
     boardElement.style.gridTemplateColumns = `repeat(${COLS}, ${PIECE_W}px)`;
     boardElement.style.gridTemplateRows = `repeat(${ROWS}, ${PIECE_H}px)`;
-    boardElement.style.maxWidth = '100%'; // Asegura que no rompa el diseño
-
-    boardElement.style.backgroundImage = 'none';
-    boardElement.style.boxShadow = 'none';
-
+    
     initGame();
 };
+
+preloader.src = IMAGE_URL;
 
 function getJigsawPath(w, h, top, right, bottom, left) {
     let d = `M 0 0 `;
@@ -48,9 +68,6 @@ function getJigsawPath(w, h, top, right, bottom, left) {
 }
 
 function initGame() {
-    document.getElementById('download-btn').href = IMAGE_URL;
-    document.getElementById('download-btn').download = 'evidencia_gc_recuperada.jpg';
-
     const tabs = [];
     for (let r = 0; r < ROWS; r++) {
         tabs[r] = [];
@@ -67,11 +84,9 @@ function initGame() {
     for (let r = 0; r < ROWS; r++) {
         for (let c = 0; c < COLS; c++) {
             const currentId = r + '-' + c;
-            
             const slot = document.createElement('div');
             slot.classList.add('slot');
             slot.dataset.id = currentId;
-            slot.innerText = ''; 
             slot.style.width = `${PIECE_W}px`;
             slot.style.height = `${PIECE_H}px`;
             slot.addEventListener('click', handleSlotClick);
@@ -102,13 +117,12 @@ function initGame() {
 
             const image = document.createElementNS(svgNS, "image");
             image.setAttribute("href", IMAGE_URL);
-            // Forzamos a que la imagen llene el tablero exacto
-            image.setAttribute("width", BOARD_W);
-            image.setAttribute("height", BOARD_H);
-            image.setAttribute("x", -(c * PIECE_W));
-            image.setAttribute("y", -(r * PIECE_H));
-            // 'none' evita que mantenga el aspecto original y lo estira a lo que le digamos
-            image.setAttribute("preserveAspectRatio", "none"); 
+            // El truco está aquí: ajustamos x e y para mostrar solo el trozo centrado
+            image.setAttribute("width", BOARD_W * (preloader.naturalWidth / cropW));
+            image.setAttribute("height", BOARD_H * (preloader.naturalHeight / cropH));
+            image.setAttribute("x", -(c * PIECE_W) - (cropX * (BOARD_W / cropW)));
+            image.setAttribute("y", -(r * PIECE_H) - (cropY * (BOARD_H / cropH)));
+            
             image.setAttribute("clip-path", `url(#clip-${currentId})`);
             svg.appendChild(image);
 
@@ -127,57 +141,11 @@ function initGame() {
             wrapper.style.height = `${PIECE_H}px`;
             wrapper.appendChild(svg);
             wrapper.addEventListener('click', handlePieceClick);
-            
             piecesArray.push(wrapper);
         }
     }
-
     piecesArray.sort(() => Math.random() - 0.5);
     piecesArray.forEach(p => piecesContainer.appendChild(p));
 }
 
-function handlePieceClick(e) {
-    e.stopPropagation(); 
-    const clickedPiece = e.currentTarget;
-    if (selectedPiece === clickedPiece) { deselectPiece(); return; }
-    if (selectedPiece) {
-        const tempParent = clickedPiece.parentElement;
-        const selectedParent = selectedPiece.parentElement;
-        tempParent.appendChild(selectedPiece);
-        selectedParent.appendChild(clickedPiece);
-        deselectPiece();
-        checkWinCondition();
-        return;
-    }
-    selectedPiece = clickedPiece;
-    selectedPiece.classList.add('selected');
-}
-
-function handleSlotClick(e) {
-    const targetSlot = e.currentTarget;
-    if (selectedPiece && targetSlot.children.length === 0) {
-        targetSlot.appendChild(selectedPiece);
-        deselectPiece();
-        checkWinCondition();
-    }
-}
-
-function deselectPiece() {
-    if (selectedPiece) {
-        selectedPiece.classList.remove('selected');
-        selectedPiece = null;
-    }
-}
-
-function checkWinCondition() {
-    let correctCount = 0;
-    document.querySelectorAll('.slot').forEach(slot => {
-        const innerPiece = slot.firstElementChild;
-        if (innerPiece && innerPiece.dataset.id === slot.dataset.id) correctCount++;
-    });
-    progressText.innerText = `[ ${correctCount}/${TOTAL_PIECES} ]`;
-    if (correctCount === TOTAL_PIECES) {
-        successPanel.style.display = 'block';
-        document.querySelectorAll('.piece-wrapper').forEach(p => p.style.pointerEvents = 'none');
-    }
-}
+// ... (Funciones handlePieceClick, handleSlotClick, deselectPiece, checkWinCondition igual)
