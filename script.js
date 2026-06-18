@@ -1,7 +1,7 @@
 // ==========================================
 // CONFIGURATION: SET YOUR IMAGE HERE
 // ==========================================
-const IMAGE_URL = 'Dia_6.jpeg'; 
+const IMAGE_URL = 'imagen.jpg'; 
 
 let COLS = 6;
 let ROWS = 6;
