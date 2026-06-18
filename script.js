@@ -12,7 +12,6 @@ let BOARD_W, BOARD_H, PIECE_W, PIECE_H;
 
 const boardElement = document.getElementById('puzzle-board');
 
-const boardElement = document.getElementById('puzzle-board');
 const piecesContainer = document.getElementById('pieces-container');
 const progressText = document.getElementById('progress-text');
 const successPanel = document.getElementById('success-panel');
@@ -255,9 +254,9 @@ function checkWinCondition() {
         }
     });
     
-    progressText.innerText = `[ ${correctCount}/24 ]`;
+    progressText.innerText = `[ ${correctCount}/${TOTAL_PIECES} ]`;
 
-    if (correctCount === 24) {
+    if (correctCount === TOTAL_PIECES) {
         successPanel.style.display = 'block';
         document.querySelectorAll('.piece-wrapper').forEach(p => p.style.pointerEvents = 'none');
     } else {
