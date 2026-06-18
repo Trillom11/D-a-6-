@@ -1,10 +1,7 @@
 // ==========================================
 // CONFIGURATION: SET YOUR IMAGE HERE
-// Distinguish between .jpg and .jpeg
 // ==========================================
-// Replace the top configuration block with this:
-// GAME CONFIGURATION
-const IMAGE_URL = 'imagen.jpg'; 
+const IMAGE_URL = 'Dia_6.jpeg'; 
 
 let COLS = 6;
 let ROWS = 6;
@@ -19,11 +16,10 @@ const successPanel = document.getElementById('success-panel');
 let piecesArray = [];
 let selectedPiece = null;
 
-// Preload image to check if it exists
+// Preload image
 const preloader = new Image();
-preloader.src = IMAGE_URL;
 
-// Replace the entire preloader.onload function with this block:
+// MUST BE DEFINED BEFORE SETTING SRC
 preloader.onload = () => {
     const imgW = preloader.naturalWidth;
     const imgH = preloader.naturalHeight;
@@ -82,6 +78,9 @@ preloader.onerror = () => {
         </div>`;
 };
 
+// SET SRC AFTER ONLOAD TO PREVENT CACHE RACE CONDITIONS
+preloader.src = IMAGE_URL;
+
 // Generates actual jigsaw shapes (tabs/blanks)
 function getJigsawPath(w, h, top, right, bottom, left) {
     let d = `M 0 0 `;
@@ -128,6 +127,8 @@ function initGame() {
             slot.classList.add('slot');
             slot.dataset.id = currentId;
             slot.innerText = `SEC-${(r*COLS)+c+1}`;
+            slot.style.width = `${PIECE_W}px`;
+            slot.style.height = `${PIECE_H}px`;
             slot.addEventListener('click', handleSlotClick);
             boardElement.appendChild(slot);
             
@@ -151,7 +152,6 @@ function initGame() {
             clipPath.appendChild(path);
             defs.appendChild(clipPath);
             svg.appendChild(defs);
-
 
             const image = document.createElementNS(svgNS, "image");
             image.setAttribute("href", IMAGE_URL);
@@ -183,6 +183,8 @@ function initGame() {
             const wrapper = document.createElement('div');
             wrapper.className = 'piece-wrapper';
             wrapper.dataset.id = currentId;
+            wrapper.style.width = `${PIECE_W}px`;
+            wrapper.style.height = `${PIECE_H}px`;
             wrapper.appendChild(svg);
             wrapper.addEventListener('click', handlePieceClick);
             
